@@ -3,9 +3,17 @@
     font-size: 46px;
 }
 
-#result {
+#display-tape {
+    background-color: white;
+    color: darkgray;
+    font-size: 13px;
+    text-align: right;
+    width: 15px;
+}
+
+#display {
     background-color: lightgray;
-    text-decoration: green;
+    color: black;
     font-weight: bold;
     font-size: 36px;
     text-align: right;
@@ -47,4 +55,9 @@
 .btn-operation {
     background-color: blue;
 }
+
+.btn-equal {
+    background-color: blue;
+}
+
 

@@ -36,7 +36,15 @@
     background-color: gray;
 }
 
-.btn-function {
+.btn-clear {
+    background-color: blue;
+}
+
+.btn-memory {
+    background-color: blue;
+}
+
+.btn-operation {
     background-color: blue;
 }
 

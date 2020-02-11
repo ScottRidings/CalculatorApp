@@ -10,6 +10,7 @@ var screenTextIsNothing = true;
 var decimalInUse = false;
 var opperatorInUse = false;
 var screenText;
+var firstValue = 0;
 
 // -------------------- Button Click -------------------- //
 document.body.addEventListener('click', function (evt) {
@@ -32,8 +33,11 @@ document.body.addEventListener('keydown', function (evt) {
         case 8: // Backspace
             removeScreenText('←');
             break;
+        case 27: // Esc
+        removeScreenText('C');
+        break;
         case 46: // Delete
-
+            removeScreenText('CE');
             break;
         default:
             addScreenText(evt.key);
@@ -64,13 +68,21 @@ function removeScreenText(value) {
         screenText = '0';
         screenTextIsNothing = true;
         decimalInUse = false;
-
     } else if (value == '←' && screenText.length == 1) {
         screenText = '0';
         screenTextIsNothing = true;
     } else if (value == '←' && screenText.length > 1) {
         if (screenText.substring(0, screenText.length-1) == '.') decimalInUse = false;
         screenText = screenText.substring(0, screenText.length-1)
+    } else if (value == 'CE') {
+        screenText = '0';
+        screenTextIsNothing = true;
+        decimalInUse = false;
+    } else if (value == 'C') {
+        screenText = '0';
+        screenTextIsNothing = true;
+        decimalInUse = false;
+        firstValue = 0;
     }
 
     document.getElementById('result').innerText = screenText;

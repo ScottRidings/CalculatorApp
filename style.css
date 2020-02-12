@@ -45,18 +45,14 @@
 }
 
 .btn-clear {
-    background-color: blue;
+    background-color: rgb(206, 16, 16);
 }
 
 .btn-memory {
-    background-color: blue;
+    background-color: rgb(121, 90, 25);
 }
 
 .btn-operation {
-    background-color: blue;
-}
-
-.btn-equal {
     background-color: blue;
 }
 

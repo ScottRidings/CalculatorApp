@@ -7,27 +7,40 @@ window.onload = function() {
     document.getElementById('display').style.width = tableWidth - 4 + 'px';
 }
 
+
 var displayText;
 var displayTextIsNothing = true;
 var displayTapeText = '';
 var decimalInUse = false;
 var operatorInUse = '';
 var valueLeftOfOperator = 0;
+var storedMemory = 0;
+var memoryInUse = false;
 
+function numberWithCommas(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function numberAsFloatValue(value) {
+    return parseFloat(value.replace(/,/g, ''));
+}
 
 // ---------------- Use Operator Buttons ---------------- //
 function useOperator(value) {
     let displayValue = parseFloat(document.getElementById('display').innerText);
 
     if (displayTapeText == '' || operatorInUse == '=') {
+        console.log('if');
         valueLeftOfOperator = displayValue;
-        displayTapeText = displayValue.toString() + ' ' + value + ' ';
+        displayTapeText = displayValue + ' ' + value + ' ';
     } else if(displayTextIsNothing == true && operatorInUse != '') {
+        console.log('else if');
         displayTapeText = displayTapeText.substring(0, displayTapeText.length - 2) + value + ' ';
     } else {
+        console.log('else');
         valueLeftOfOperator = preformMathOperation(displayValue);
         displayTapeText = displayTapeText + displayText + ' ' + value + ' ';
-        displayText = valueLeftOfOperator.toString();
+        displayText = valueLeftOfOperator;
         document.getElementById('display').innerText = displayText;
     }
 
@@ -110,6 +123,26 @@ function removeDisplayText(value) {
 }
 
 
+function useMemory(value) {
+    let displayValue = parseFloat(document.getElementById('display').innerText);
+    if(value == 'M+') {
+        storedMemory = storedMemory + displayValue;
+        memoryInUse = true;
+        displayTextIsNothing = true;
+    } else if (value == 'M-') {
+        storedMemory = storedMemory - displayValue;
+        memoryInUse = true;
+        displayTextIsNothing = true;
+    } else if (value == 'MC') {
+        storedMemory = 0;
+        memoryInUse = false;
+    } else if (value == 'MR' && memoryInUse == true) {
+        displayText = storedMemory;
+        document.getElementById('display').innerText = displayText;
+        displayTextIsNothing = false;
+    }
+}
+
 // ----------------- Button Click Event ----------------- //
 document.body.addEventListener('click', function (evt) {
     if (evt.target.className == 'button btn-number') {
@@ -119,7 +152,7 @@ document.body.addEventListener('click', function (evt) {
     } else if (evt.target.className == 'button btn-operation') {
         useOperator(evt.target.innerText);
     }else if (evt.target.className == 'button btn-memory') {
-        console.log(evt)
+        useMemory(evt.target.innerText);
     }
     
 }, false);

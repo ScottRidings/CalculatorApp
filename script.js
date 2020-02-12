@@ -4,9 +4,8 @@ window.onload = function() {
     let tableBody = myTable.getElementsByTagName('tbody')[0];
     let tableWidth = tableBody.offsetWidth;
     document.getElementById('display-tape').style.width = tableWidth - 4 + 'px';
-    document.getElementById('display').style.width = tableWidth - 4 + 'px';
+    document.getElementById('display').style.width = tableWidth - 4 + 'px';    
 }
-
 
 var displayText;
 var displayTextIsNothing = true;
@@ -17,6 +16,8 @@ var valueLeftOfOperator = 0;
 var storedMemory = 0;
 var memoryInUse = false;
 
+
+// ----------------- Format Dixplay Text ----------------- //
 function numberWithCommas(value) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -25,23 +26,21 @@ function numberAsFloatValue(value) {
     return parseFloat(value.replace(/,/g, ''));
 }
 
+
 // ---------------- Use Operator Buttons ---------------- //
 function useOperator(value) {
-    let displayValue = parseFloat(document.getElementById('display').innerText);
+    let displayValue = numberAsFloatValue(document.getElementById('display').innerText);
 
     if (displayTapeText == '' || operatorInUse == '=') {
-        console.log('if');
         valueLeftOfOperator = displayValue;
         displayTapeText = displayValue + ' ' + value + ' ';
     } else if(displayTextIsNothing == true && operatorInUse != '') {
-        console.log('else if');
         displayTapeText = displayTapeText.substring(0, displayTapeText.length - 2) + value + ' ';
     } else {
-        console.log('else');
         valueLeftOfOperator = preformMathOperation(displayValue);
         displayTapeText = displayTapeText + displayText + ' ' + value + ' ';
         displayText = valueLeftOfOperator;
-        document.getElementById('display').innerText = displayText;
+        document.getElementById('display').innerText = numberWithCommas(displayText);
     }
 
     operatorInUse = value;
@@ -84,7 +83,7 @@ function addDisplayText(value) {
         displayTextIsNothing = false;
         if (value == '.') decimalInUse = true;
 
-        document.getElementById('display').innerText = displayText;
+        document.getElementById('display').innerText = numberWithCommas(displayText);
     }
 }
 
@@ -103,10 +102,11 @@ function removeDisplayText(value) {
             if (displayText.substring(displayText.length - 1) == '.') decimalInUse = false;
             displayText = displayText.substring(0, displayText.length-1)
         }
-    } else if (value == 'CE' && displayTextIsNothing == false) {
+    } else if (value == 'CE') {
         displayText = '0';
         displayTextIsNothing = true;
         decimalInUse = false;
+        if (operatorInUse == '=') displayTapeText = '';
     } else if (value == 'C') {
         displayText = '0';
         displayTextIsNothing = true;
@@ -119,27 +119,46 @@ function removeDisplayText(value) {
 
     document.getElementById('display-tape').innerText = displayTapeText;
     if (displayTapeText == '') document.getElementById('display-tape').innerHTML = '<br>';
-    document.getElementById('display').innerText = displayText;
+    document.getElementById('display').innerText = numberWithCommas(displayText);
 }
 
 
 function useMemory(value) {
-    let displayValue = parseFloat(document.getElementById('display').innerText);
+    let displayValue = numberAsFloatValue(document.getElementById('display').innerText);
     if(value == 'M+') {
         storedMemory = storedMemory + displayValue;
         memoryInUse = true;
         displayTextIsNothing = true;
+        dimMemoryButtons(false);
     } else if (value == 'M-') {
         storedMemory = storedMemory - displayValue;
         memoryInUse = true;
         displayTextIsNothing = true;
+        dimMemoryButtons(false);
     } else if (value == 'MC') {
         storedMemory = 0;
         memoryInUse = false;
+        dimMemoryButtons(true);
     } else if (value == 'MR' && memoryInUse == true) {
         displayText = storedMemory;
-        document.getElementById('display').innerText = displayText;
+        document.getElementById('display').innerText = numberWithCommas(displayText);
         displayTextIsNothing = false;
+    }
+}
+
+
+function dimMemoryButtons(dimButtons) {
+    let myTable = document.getElementById('table-buttons');
+    let tableBody = myTable.getElementsByTagName('tbody')[0];
+    let cell1 = tableBody.rows[0].cells[0];
+    let cell2 = tableBody.rows[0].cells[1];
+    
+    if (dimButtons == true) {
+        cell1.style = 'background-color: rgba(121, 90, 25, .5)';
+        cell2.style = 'background-color: rgba(121, 90, 25, .5)';
+    } else {
+        cell1.style = 'background-color: rgb(121, 90, 25)';
+        cell2.style = 'background-color: rgb(121, 90, 25)';
     }
 }
 
